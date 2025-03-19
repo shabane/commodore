@@ -1,9 +1,15 @@
 #!/usr/bin/env python3
 from telebot_router import TeleBot
 import os
+import yaml
 
 app = TeleBot(__name__)
 
+prompts = None
+with open(f'{os.environ.get("PROMPTS_FILE", "./prompts.yaml")}', 'r') as fle:
+    prompts = yaml.safe_load(fle)
+
+print(prompts)
 
 @app.route('/command ?(.*)')
 def helper(message, cmd):
