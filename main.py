@@ -16,7 +16,7 @@ def menu(message, cmd):
     chat_dest = message['chat']['id']
     for prompt in prompts.get('commands'):
         if prompt.get('key') == cmd:
-            app.send_message(chat_dest, f'{prompt.get("value")}')
+            app.send_message(chat_dest, f'{prompt.get("message")}') if prompt.get("message") else ...
 
             if prompt.get('photos'):
                 for photo in prompt.get('photos'):
