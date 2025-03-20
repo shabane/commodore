@@ -2,8 +2,10 @@
 from telebot_router import TeleBot
 import os
 import yaml
+from telsdk import TelegramClient
 
 app = TeleBot(__name__)
+telegram_client = TelegramClient(os.environ.get('API_KEY'))
 
 prompts = None
 with open(f'{os.environ.get("PROMPTS_FILE", "./prompts.yaml")}', 'r') as fle:
@@ -15,6 +17,11 @@ def menu(message, cmd):
     for prompt in prompts.get('commands'):
         if prompt.get('key') == cmd:
             app.send_message(chat_dest, f'{prompt.get("value")}')
+
+            if prompt.get('photos'):
+                for photo in prompt.get('photos'):
+                    telegram_client.sendPhoto(photo, chat_dest)
+
             return
     app.send_message(chat_dest, f'دستور اشتباه است!')
 
