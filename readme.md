@@ -6,15 +6,30 @@ to send to the user whenever user sent the command.
 
 ### YAML syntax
 
-a list of key/value pair. key as the command and the value as the answerer
+a list of key/value pair. key as the command and the message as the answerer.
+you can have a list of each **photos, audios, documents, videos**.
 
 ```yaml
-    commands:
-      - key: help
-        value: this bot can do something 
+commands:
+    - key: foo
+      message: bar
+      photos:
+        - "path/2/1.jpg"
+        - "assets/2.jpg"
 
-      - key: foo
-        value: bar
+    - key: foo2
+      message: bar2
+      audios:
+        - "assets/audio.ogg"
+      photos:
+        - "assets/1.jpg"
+      documents:
+        - "assets/1.pdf"
+      videos:
+        - "assets/1.mp4"
+
+    - key: hi
+      message: hi there, how are you?
 ```
 
 ### How to run?
