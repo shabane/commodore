@@ -1,0 +1,6 @@
+commands:
+    - key: foo
+      value: bar
+
+    - key: foo2
+      value: bar2
