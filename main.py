@@ -9,12 +9,14 @@ prompts = None
 with open(f'{os.environ.get("PROMPTS_FILE", "./prompts.yaml")}', 'r') as fle:
     prompts = yaml.safe_load(fle)
 
-print(prompts)
-
-@app.route('/command ?(.*)')
-def helper(message, cmd):
+@app.route('/ ?(.*)')
+def menu(message, cmd):
     chat_dest = message['chat']['id']
-    app.send_message(chat_dest, "fuck")
+    for prompt in prompts.get('commands'):
+        if prompt.get('key') == cmd:
+            app.send_message(chat_dest, f'{prompt.get("value")}')
+            return
+    app.send_message(chat_dest, f'دستور اشتباه است!')
 
 
 if __name__ == '__main__':
