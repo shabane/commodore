@@ -11,6 +11,7 @@ prompts = None
 with open(f'{os.environ.get("PROMPTS_FILE", "./prompts.yaml")}', 'r') as fle:
     prompts = yaml.safe_load(fle)
 
+
 @app.route('/ ?(.*)')
 def menu(message, cmd):
     chat_dest = message['chat']['id']
