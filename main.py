@@ -36,7 +36,7 @@ def menu(message, cmd):
                     telegram_client.sendVideo(video, chat_dest)
 
             return
-    app.send_message(chat_dest, f'دستور اشتباه است!')
+    app.send_message(chat_dest, f'{os.environ.get("WRONG_CMD_MSG", "wrong message!")}')
 
 
 if __name__ == '__main__':
