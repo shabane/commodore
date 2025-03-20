@@ -22,3 +22,11 @@ class TelegramClient:
         with open(path, 'rb') as fli:
             res = requests.post(os.path.join(self.api_url, 'sendAudio'), data={'chat_id': chat_id}, files={'audio': fli})
             return res.json()
+
+    def sendDocument(self, path: str, chat_id: str):
+        if not os.path.exists(path):
+            raise FileExistsError(f'no such file: {path}')
+
+        with open(path, 'rb') as fli:
+            res = requests.post(os.path.join(self.api_url, 'sendDocument'), data={'chat_id': chat_id}, files={'document': fli})
+            return res.json()
