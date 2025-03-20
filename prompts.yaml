@@ -1,6 +1,6 @@
 commands:
     - key: foo
-      value: bar
+      message: bar
 
     - key: foo2
-      value: bar2
+      message: bar2
