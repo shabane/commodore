@@ -22,6 +22,10 @@ def menu(message, cmd):
                 for photo in prompt.get('photos'):
                     telegram_client.sendPhoto(photo, chat_dest)
 
+            if prompt.get('audios'):
+                for audio in prompt.get('audios'):
+                    telegram_client.sendAudio(audio, chat_dest)
+
             return
     app.send_message(chat_dest, f'دستور اشتباه است!')
 
