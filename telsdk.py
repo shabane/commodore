@@ -30,3 +30,14 @@ class TelegramClient:
         with open(path, 'rb') as fli:
             res = requests.post(os.path.join(self.api_url, 'sendDocument'), data={'chat_id': chat_id}, files={'document': fli})
             return res.json()
+
+    def sendVideo(self, path: str, chat_id: str):
+        if not os.path.exists(path):
+            raise FileExistsError(f'no such file: {path}')
+
+        if os.stat(path).st_size * 2 ** 20 >= 50:
+            raise Exception('video too big. it should be under 50MB')
+
+        with open(path, 'rb') as fli:
+            res = requests.post(os.path.join(self.api_url, 'sendVideo'), data={'chat_id': chat_id}, files={'video': fli})
+            return res.json()

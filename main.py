@@ -26,6 +26,10 @@ def menu(message, cmd):
                 for audio in prompt.get('audios'):
                     telegram_client.sendAudio(audio, chat_dest)
 
+            if prompt.get('documents'):
+                for document in prompt.get('documents'):
+                    telegram_client.sendDocument(document, chat_dest)
+
             return
     app.send_message(chat_dest, f'دستور اشتباه است!')
 
