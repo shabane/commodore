@@ -9,7 +9,7 @@ class TelegramClient:
 
     def sendPhoto(self, path: str, chat_id: str):
         if not os.path.exists(path):
-            raise FileExistsError(f'no such file: {path}')
+            raise FileNotFoundError(f'no such file: {path}')
 
         with open(path, 'rb') as fli:
             res = requests.post(os.path.join(self.api_url, 'sendPhoto'), data={'chat_id': chat_id}, files={'photo': fli})
@@ -17,7 +17,7 @@ class TelegramClient:
 
     def sendAudio(self, path: str, chat_id: str):
         if not os.path.exists(path):
-            raise FileExistsError(f'no such file: {path}')
+            raise FileNotFoundError(f'no such file: {path}')
 
         with open(path, 'rb') as fli:
             res = requests.post(os.path.join(self.api_url, 'sendAudio'), data={'chat_id': chat_id}, files={'audio': fli})
@@ -25,7 +25,7 @@ class TelegramClient:
 
     def sendDocument(self, path: str, chat_id: str):
         if not os.path.exists(path):
-            raise FileExistsError(f'no such file: {path}')
+            raise FileNotFoundError(f'no such file: {path}')
 
         with open(path, 'rb') as fli:
             res = requests.post(os.path.join(self.api_url, 'sendDocument'), data={'chat_id': chat_id}, files={'document': fli})
@@ -33,7 +33,7 @@ class TelegramClient:
 
     def sendVideo(self, path: str, chat_id: str):
         if not os.path.exists(path):
-            raise FileExistsError(f'no such file: {path}')
+            raise FileNotFoundError(f'no such file: {path}')
 
         if os.stat(path).st_size * 2 ** 20 >= 50:
             raise Exception('video too big. it should be under 50MB')
