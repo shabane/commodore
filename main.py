@@ -30,6 +30,10 @@ def menu(message, cmd):
                 for document in prompt.get('documents'):
                     telegram_client.sendDocument(document, chat_dest)
 
+            if prompt.get('videos'):
+                for video in prompt.get('videos'):
+                    telegram_client.sendVideo(video, chat_dest)
+
             return
     app.send_message(chat_dest, f'دستور اشتباه است!')
 
