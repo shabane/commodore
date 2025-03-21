@@ -1,12 +1,12 @@
 # commodore
 
 as simple as editing a `yaml` file!
-set your key as the bot command and set its corresponding value
-to send to the user whenever user sent the command.
+set your key as the bot command and set its corresponding value as response message
+to send it to user whenever user sent that command.
 
 ### YAML syntax
 
-a list of key/value pair. key as the command and the message as the answerer.
+a list of key/value pair. key as the command and the message as the answare.
 you can have a list of each **photos, audios, documents, videos**.
 
 ```yaml
@@ -33,10 +33,34 @@ commands:
 ```
 
 ### How to run?
+
+- run `git clone --depth 1 https://github.com/shabane/commodore.git && cd commodore`
 - set `API_KEY` for bot token
 - python3 -m venv .env
 - source .env/bin/activate
+- pip install -r ./requirements.txt
 - ./main.py
 
-> docker version is in the way so don't worry, you will just need
-> to simply set the `API_KEY`, thats all.
+> dont forget to add your command to `prompts.yaml` file.
+
+or just use docker!
+
+### Docker
+
+at first you should add your commands to `prompts.yaml` file, then if you have any other files, add them to any dir you want.
+remember that you should specifiy this path in your `prompts.yaml`. then just volume this dir and files to the container.
+
+```bash
+docker run -d -v ./prompts.yaml:/code/prompts.yaml -v ./assets:/code/assets -e API_KEY='<API_KEY>' mshabane/commodore:1.0.0
+```
+
+> if you make any changes in `PPROMPTS_FILE`, the script will auto reload! **so you do not need to `docker restart`**
+
+### Evn
+
+|           key | value example |          description    |   required    |
+|:-------------:|:-------------:|:-----------------------:|:-------------:|
+|     API_KEY   |   xxxx:yyyy   | this is you bot api key |     require   |
+| WRONG_CMD_MSG | "wrong command" | message to send if user enter wront command | optional |
+| PROMPTS_FILE  | ./prompts.yaml | YAML file that contain list of commands | optional |
+
