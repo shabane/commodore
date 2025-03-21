@@ -40,6 +40,6 @@ def menu(message, cmd):
 
 
 if __name__ == '__main__':
-    print("starting...")
+    print("starting...", flush=True)
     app.config['api_key'] = os.environ.get('API_KEY')
     app.poll(debug=True)
