@@ -5,10 +5,15 @@ commands:
     - key: foo2
       message: bar2
 
-    - key: /photo
-      message: im sending you a photo!
+    - key: /command
+      message: you send me a command! now i will send back a photo
       photos:
         - "./assets/goat.jpg"
 
-    - key: سلام
-      message: لطفا فقط کامند های مشخص شده را وارد کنید.
+wrong_command:
+  messages:
+    - "you enter the wrong message or command!"
+    - "please choose one of this `/command`, `foo` or `foo2`"
+
+  photos:
+    - "./assets/goat.jpg"
