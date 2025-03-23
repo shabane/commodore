@@ -4,3 +4,11 @@ commands:
 
     - key: foo2
       message: bar2
+
+    - key: /photo
+      message: im sending you a photo!
+      photos:
+        - "./assets/goat.jpg"
+
+    - key: سلام
+      message: لطفا فقط کامند های مشخص شده را وارد کنید.
