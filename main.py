@@ -34,23 +34,23 @@ async def director(update: Update.message) -> str:
     #TODO: check file existance before using it path!
     #TODO: check if yaml file is correct and exist!
     #TODO: use caption for each files that we sending.
-    #TODO: reduce this deplicated functions!
     #TODO: use :=
-    #TODO: message could be a list of messages!
-    #TODO: write errors to stderr
+    #TODO: write errors to stderr <
+    #TODO: sending messages are duplicated ageain!
     is_cmd_match = False
     for prompt in prompts.get('commands'):
         if prompt.get('key') == update.text:
             is_cmd_match = True
-            await update.reply_text(f'{prompt.get("message")}') if prompt.get("message") else ...
-            await fileSender(prompt, update)
+            if messages := prompt.get('messages'):
+                for message in messages:
+                    await update.reply_text(f'{message}')
+                await fileSender(prompt, update)
 
     if not is_cmd_match:
         if prompt := prompts.get('wrong_command'):
             if messages := prompt.get('messages'):
                 for message in messages:
-                    await update.reply_text(f'{message}') if prompt.get("messages") else ...
-
+                    await update.reply_text(f'{message}')
             await fileSender(prompt, update)
         else:
             print("no wrong/default command set!", flush=True, file=sys.stderr)
