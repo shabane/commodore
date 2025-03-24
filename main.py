@@ -35,7 +35,6 @@ async def director(update: Update.message) -> str:
     #TODO: check if yaml file is correct and exist!
     #TODO: use caption for each files that we sending.
     #TODO: use :=
-    #TODO: write errors to stderr <
     #TODO: sending messages are duplicated ageain!
     is_cmd_match = False
     for prompt in prompts.get('commands'):
@@ -63,7 +62,7 @@ async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     elif update.business_message:
         await director(update.business_message)
     else:
-        print("No supported message!", flush=True)
+        print("No supported message!", flush=True, file=sys.stderr)
 
 
 def main() -> None:
