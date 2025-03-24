@@ -21,24 +21,25 @@ you can have a list of each **photos, audios, documents, videos**.
 ```yaml
 commands:
     - key: foo
-      message: bar
-      photos:
-        - "path/2/1.jpg"
-        - "assets/2.jpg"
+      messages:
+        - "foo"
+        - "the foo"
+        - "foo to the moon!"
 
-    - key: foo2
-      message: bar2
-      audios:
-        - "assets/audio.ogg"
-      photos:
-        - "assets/1.jpg"
-      documents:
-        - "assets/1.pdf"
-      videos:
-        - "assets/1.mp4"
+    - key: /command
+      messages:
+        - "you send me a command! now i will send back a photo"
 
-    - key: hi
-      message: hi there, how are you?
+      photos:
+        - "./assets/goat.jpg"
+
+wrong_command:
+  messages:
+    - "you enter the wrong message or command!"
+    - "please choose one of this `/command`, `foo` or `foo2`"
+
+  photos:
+    - "./assets/goat.jpg"
 ```
 
 ### How to run?
@@ -70,6 +71,5 @@ docker run -d -v ./prompts.yaml:/code/prompts.yaml -v ./assets:/code/assets -e A
 |           key | value example |          description    |   required    |
 |:-------------:|:-------------:|:-----------------------:|:-------------:|
 |     API_KEY   |   xxxx:yyyy   | this is you bot api key |     require   |
-| WRONG_CMD_MSG | "wrong command" | message to send if user enter wront command | optional |
 | PROMPTS_FILE  | ./prompts.yaml | YAML file that contain list of commands | optional |
 
