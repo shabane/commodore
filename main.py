@@ -13,20 +13,20 @@ with open(f'{os.environ.get("PROMPTS_FILE", "./prompts.yaml")}', 'r') as fle:
 
 
 async def fileSender(prompt: dict, update: Update.message):
-    if prompt.get('photos'):
-        for photo in prompt.get('photos'):
+    if photos := prompt.get('photos'):
+        for photo in photos:
             await update.reply_photo(Path(photo))
 
-    if prompt.get('audios'):
-        for audio in prompt.get('audios'):
+    if audios := prompt.get('audios'):
+        for audio in audios:
             await update.reply_audio(Path(audio))
 
-    if prompt.get('documents'):
-        for document in prompt.get('documents'):
+    if documents := prompt.get('documents'):
+        for document in documents:
             await update.reply_document(Path(document))
 
-    if prompt.get('videos'):
-        for video in prompt.get('videos'):
+    if videos := prompt.get('videos'):
+        for video in videos:
             await update.reply_video(Path(video))
 
 
@@ -34,7 +34,6 @@ async def director(update: Update.message) -> str:
     #TODO: check file existance before using it path!
     #TODO: check if yaml file is correct and exist!
     #TODO: use caption for each files that we sending.
-    #TODO: use :=
     #TODO: sending messages are duplicated ageain!
     is_cmd_match = False
     for prompt in prompts.get('commands'):
