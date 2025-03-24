@@ -35,6 +35,8 @@ async def director(update: Update.message) -> str:
     #TODO: check if yaml file is correct and exist!
     #TODO: use caption for each files that we sending.
     #TODO: sending messages are duplicated ageain!
+    #TODO: use seprate file for some functionalities
+    #TODO: we should let this run another module to run and send data to user(importlib)
     is_cmd_match = False
     for prompt in prompts.get('commands'):
         if prompt.get('key') == update.text:
@@ -42,7 +44,7 @@ async def director(update: Update.message) -> str:
             if messages := prompt.get('messages'):
                 for message in messages:
                     await update.reply_text(f'{message}')
-                await fileSender(prompt, update)
+            await fileSender(prompt, update)
 
     if not is_cmd_match:
         if prompt := prompts.get('wrong_command'):
