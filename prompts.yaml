@@ -1,6 +1,25 @@
 commands:
     - key: foo
-      message: bar
+      messages:
+        - "foo"
+        - "the foo"
+        - "foo to the moon!"
 
     - key: foo2
-      message: bar2
+      messages:
+        - "bar2"
+
+    - key: /command
+      messages:
+        - "you send me a command! now i will send back a photo"
+
+      photos:
+        - "./assets/goat.jpg"
+
+wrong_command:
+  messages:
+    - "you enter the wrong message or command!"
+    - "please choose one of this `/command`, `foo` or `foo2`"
+
+  photos:
+    - "./assets/goat.jpg"

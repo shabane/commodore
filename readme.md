@@ -4,6 +4,15 @@ as simple as editing a `yaml` file!
 set your key as the bot command and set its corresponding value as response message
 to send it to user whenever user sent that command.
 
+> this is **NOT STABLE** yet, and this will be 2en version.
+
+> in the peace of code i used feature rich library `python-telgram-bot` to interact with telegram bots.
+> in the previous version i write my own peace of sh*t that used telegram API to send files, and
+> also i used the shiteist library ever `telebot` which does not support anything but send/receive simple
+> text messages.
+> in this version, the code will support business messages too.
+> also i will add some more other feature to yaml syntax to support **captions** for any files.
+
 ### YAML syntax
 
 a list of key/value pair. key as the command and the message as the answare.
@@ -12,24 +21,25 @@ you can have a list of each **photos, audios, documents, videos**.
 ```yaml
 commands:
     - key: foo
-      message: bar
-      photos:
-        - "path/2/1.jpg"
-        - "assets/2.jpg"
+      messages:
+        - "foo"
+        - "the foo"
+        - "foo to the moon!"
 
-    - key: foo2
-      message: bar2
-      audios:
-        - "assets/audio.ogg"
-      photos:
-        - "assets/1.jpg"
-      documents:
-        - "assets/1.pdf"
-      videos:
-        - "assets/1.mp4"
+    - key: /command
+      messages:
+        - "you send me a command! now i will send back a photo"
 
-    - key: hi
-      message: hi there, how are you?
+      photos:
+        - "./assets/goat.jpg"
+
+wrong_command:
+  messages:
+    - "you enter the wrong message or command!"
+    - "please choose one of this `/command`, `foo` or `foo2`"
+
+  photos:
+    - "./assets/goat.jpg"
 ```
 
 ### How to run?
@@ -61,6 +71,5 @@ docker run -d -v ./prompts.yaml:/code/prompts.yaml -v ./assets:/code/assets -e A
 |           key | value example |          description    |   required    |
 |:-------------:|:-------------:|:-----------------------:|:-------------:|
 |     API_KEY   |   xxxx:yyyy   | this is you bot api key |     require   |
-| WRONG_CMD_MSG | "wrong command" | message to send if user enter wront command | optional |
 | PROMPTS_FILE  | ./prompts.yaml | YAML file that contain list of commands | optional |
 
