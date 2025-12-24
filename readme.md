@@ -29,15 +29,19 @@ commands:
     - key: /command
       messages:
         - "you send me a command! now i will send back a photo"
-
       photos:
         - "./assets/goat.jpg"
+
+    - key: plugs
+      messages:
+        - "yes we do!"
+      plugins: # plugins should be in the `./plugins/` directory.
+        - "test"
 
 wrong_command:
   messages:
     - "you enter the wrong message or command!"
     - "please choose one of this `/command`, `foo` or `foo2`"
-
   photos:
     - "./assets/goat.jpg"
 ```
@@ -73,3 +77,17 @@ docker run -d -v ./prompts.yaml:/code/prompts.yaml -v ./assets:/code/assets -e A
 |     API_KEY   |   xxxx:yyyy   | this is you bot api key |     require   |
 | PROMPTS_FILE  | ./prompts.yaml | YAML file that contain list of commands | optional |
 
+
+### Plugins
+
+if you want to write your own plugins,
+it just has three conditions:
+1. file name should be `main.py`.
+2. the file should have a `run` method.
+3. put the plugin directory in `./plugins/` directory, for example
+```text
+├── another
+|   └── main.py
+└── test
+    └── main.py
+```
