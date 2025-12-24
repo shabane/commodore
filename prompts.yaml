@@ -4,6 +4,8 @@ commands:
         - "foo"
         - "the foo"
         - "foo to the moon!"
+      plugins:
+        - "test" # this plugin is just for test
 
     - key: foo2
       messages:
