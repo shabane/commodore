@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
+from turtle import update
+
 from telegram import ForceReply, Update
 from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters
 import os
 import yaml
 from pathlib import Path
 import sys
+import importlib
 
 
 prompts = None
@@ -44,7 +47,19 @@ async def director(update: Update.message) -> str:
             if messages := prompt.get('messages'):
                 for message in messages:
                     await update.reply_text(f'{message}')
+
             await fileSender(prompt, update)
+
+            if plugins := prompt.get('plugins'):
+                for plugin in plugins:
+                    if os.path.exists(f'./plugins/{plugin}/main.py'):
+                        lib = importlib.import_module(f'plugins.{plugin}.main')
+                        if hasattr(lib, 'run'):
+                            await lib.run(prompt=prompt, update=update)
+                        else:
+                            print("plugin is not right") #TODO: this should be a better error handling.
+                    else:
+                        print("plugin file does not exist") #TODO: use the better error handling method.
 
     if not is_cmd_match:
         if prompt := prompts.get('wrong_command'):
