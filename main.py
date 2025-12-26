@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-from turtle import update
-
 from telegram import ForceReply, Update
 from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters
 import os
@@ -33,6 +31,19 @@ async def fileSender(prompt: dict, update: Update.message):
             await update.reply_video(Path(video))
 
 
+async def pluginRunner(prompt: dict, update: Update.message):
+            if plugins := prompt.get('plugins'):
+                for plugin in plugins:
+                    if os.path.exists(f'./plugins/{plugin}/main.py'):
+                        lib = importlib.import_module(f'plugins.{plugin}.main')
+                        if hasattr(lib, 'run'):
+                            await lib.run(prompt=prompt, update=update)
+                        else:
+                            print("plugin is not right") #TODO: this should be a better error handling.
+                    else:
+                        print("plugin file does not exist") #TODO: use the better error handling method.
+
+
 async def director(update: Update.message) -> str:
     #TODO: check file existance before using it path!
     #TODO: check if yaml file is correct and exist!
@@ -49,17 +60,8 @@ async def director(update: Update.message) -> str:
                     await update.reply_text(f'{message}')
 
             await fileSender(prompt, update)
+            await pluginRunner(prompt, update)
 
-            if plugins := prompt.get('plugins'):
-                for plugin in plugins:
-                    if os.path.exists(f'./plugins/{plugin}/main.py'):
-                        lib = importlib.import_module(f'plugins.{plugin}.main')
-                        if hasattr(lib, 'run'):
-                            await lib.run(prompt=prompt, update=update)
-                        else:
-                            print("plugin is not right") #TODO: this should be a better error handling.
-                    else:
-                        print("plugin file does not exist") #TODO: use the better error handling method.
 
     if not is_cmd_match:
         if prompt := prompts.get('wrong_command'):
@@ -67,6 +69,7 @@ async def director(update: Update.message) -> str:
                 for message in messages:
                     await update.reply_text(f'{message}')
             await fileSender(prompt, update)
+            await pluginRunner(prompt, update)
         else:
             print("no wrong/default command set!", flush=True, file=sys.stderr)
 
