@@ -16,6 +16,7 @@ commands:
   - key: /start
     messages:
       - Welcome to the Commodore bot! Try typing /help to see what I can do.
+      - try to send /test to test me ;)
 
   # The /help command provides basic info to the user.
   - key: /help
@@ -28,7 +29,6 @@ commands:
     # List of authorized admin usernames (without the @ symbol) or user IDs.
     admins:
       - m_shabane
-      - arya
     # This triggers the 'admin' plugin located in plugins/admin/main.py
     plugins:
       - admin

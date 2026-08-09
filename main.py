@@ -26,32 +26,32 @@ async def fileSender(prompt: dict, update: Update):
             try:
                 with open(photo, 'rb') as f:
                     await update.reply_photo(f)
-            except FileNotFoundError:
-                print(f"Error: Photo not found: {photo}")
+            except Exception as e:
+                print(f"Error sending photo {photo}: {e}")
 
     if audios := prompt.get('audios'):
         for audio in audios:
             try:
                 with open(audio, 'rb') as f:
                     await update.reply_audio(f)
-            except FileNotFoundError:
-                print(f"Error: Audio not found: {audio}")
+            except Exception as e:
+                print(f"Error sending audio {audio}: {e}")
 
     if documents := prompt.get('documents'):
         for document in documents:
             try:
                 with open(document, 'rb') as f:
                     await update.reply_document(f)
-            except FileNotFoundError:
-                print(f"Error: Document not found: {document}")
+            except Exception as e:
+                print(f"Error sending document {document}: {e}")
 
     if videos := prompt.get('videos'):
         for video in videos:
             try:
                 with open(video, 'rb') as f:
                     await update.reply_video(f)
-            except FileNotFoundError:
-                print(f"Error: Video not found: {video}")
+            except Exception as e:
+                print(f"Error sending video {video}: {e}")
 
 
 async def pluginRunner(
