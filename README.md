@@ -62,5 +62,12 @@ Plugins are stored in the `./plugins/` directory. Each plugin must be a folder c
 
 You can configure a command in `prompts.yaml` to trigger one or more plugins when the command is sent by the user.
 
+## Available Plugins
+You can easily extend Commodore's functionality by dropping existing plugins into your `plugins/` directory.
+
+Here are some official plugins you can use:
+* [**CommodorAdmin**](https://github.com/shabane/commodorAdmin) - An interactive Telegram chat dashboard that allows admins to dynamically edit the bot's commands, text messages, and media configurations in real time.
+* [**CommodoreHttpPostCall**](https://github.com/shabane/commodoreHttpPostCall) - A utility plugin for seamlessly making HTTP POST requests triggered by bot commands.
+
 ---
 *Built with ❤️ using the Commodore framework.*
