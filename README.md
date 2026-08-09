@@ -16,6 +16,25 @@ Whenever a user triggers a command, Commodore automatically sends the configured
 
 ## Getting Started
 
+### Running with Docker (Recommended)
+Commodore is automatically built and published to the GitHub Container Registry. You can run the bot instantly using Docker without installing Python or dependencies on your host machine!
+
+```bash
+# Pull the latest image
+docker pull ghcr.io/shabane/commodore:latest
+
+# Run the bot, passing your API token and mapping the configuration files
+docker run -d \
+  --name commodore \
+  -e API_KEY="your_bot_token_here" \
+  -v $(pwd)/prompts.yaml:/code/prompts.yaml \
+  -v $(pwd)/assets:/code/assets \
+  -v $(pwd)/plugins:/code/plugins \
+  ghcr.io/shabane/commodore:latest
+```
+
+### Manual Installation
+
 ### 1. Requirements
 * Python 3.10+
 * `python-telegram-bot` v22+
