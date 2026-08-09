@@ -44,6 +44,14 @@ commands:
     documents:
       - ./assets/sample.txt
 
+  # The /backup command triggers the commodorBackup plugin to generate a zip file of active assets.
+  - key: /backup
+    admins:
+      - m_shabane
+      - arya
+    plugins:
+      - backup
+
 # ==============================================================================
 # Fallback Settings
 # ==============================================================================
