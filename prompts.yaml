@@ -1,33 +1,62 @@
+# ==============================================================================
+# Commodore Bot - Prompts & Configuration
+# ==============================================================================
+# This file defines all the commands your bot will respond to.
+# Each command must have a 'key' (the text the user types, like /start).
+# 
+# A command can optionally have any of the following:
+#   - messages: A list of text replies to send to the user.
+#   - photos, videos, audios, documents: Lists of file paths to send.
+#   - plugins: A list of plugin names to execute for this command.
+#   - admins: A list of usernames or user IDs authorized to use this command.
+# ==============================================================================
+
 commands:
-- key: /start
-  messages:
-  - Welcome to the test bot! Try typing /help or /admin.
-  - salam
-  - kir
-- key: /help
-  messages:
-  - You can use /admin to manage this bot if you are authorized.
-- key: /admin
-  admins:
-  - m_shabane
-  plugins:
-  - admin
-- key: /kir
-  videos:
-  - ./assets/BAACAgEAAxkBAAIGKmp4MwuTEkAzKznScyCJZDToOA_FAALTCAACD1fBRxkepJmQi95ZPQQ.mp4
-  - ./assets/BAACAgEAAxkBAAIGM2p4M_WND6UnYs1kOxKoJlCcvZi3AALVCAACD1fBR15yIs22Jy16PQQ.mp4
-- key: /kos
-  messages:
-  - this is a kos command
-  videos:
-  - ./assets/BAACAgEAAxkBAAIGSGp4NQlsCjfMEDpT4pfIF7pTCXJGAALYCAACD1fBR5XdabAIs7t8PQQ.mp4
-  audios:
-  - ./assets/AwACAgEAAxkBAAIGU2p4NXN4yHmYWd3pDvx3QF0zdKsKAALbCAACD1fBR7piHFGhOHNdPQQ.ogg
-  photos:
-  - ./assets/AgACAgEAAxkBAAIGa2p4N6A4UlaxjGkJkskWOoUtUXyuAAKHDGsbD1fBR6PbncizJ8z1AQADAgADeQADPQQ.jpg
-  documents:
-  - ./assets/BQACAgEAAxkBAAIGdGp4N8giUjHneaJfOiCZ-XMNFG1sAAIMCQACD1fBRxuFKCY2fZV5PQQ.pdf
-  - ./assets/BQACAgEAAxkBAAIGd2p4N9N6h3mqQIvvca4dezToHqRuAAINCQACD1fBR5xWM1kDV8YGPQQ.pdf
+  # The /start command is triggered when a user first talks to the bot.
+  - key: /start
+    messages:
+      - Welcome to the Commodore bot! Try typing /help to see what I can do.
+
+  # The /help command provides basic info to the user.
+  - key: /help
+    messages:
+      - This bot is powered by the Commodore framework. 
+      - If you are an admin, type /admin to manage the bot's commands directly from Telegram!
+
+  # The /admin command loads the admin plugin dashboard.
+  - key: /admin
+    # List of authorized admin usernames (without the @ symbol) or user IDs.
+    admins:
+      - m_shabane
+      - arya
+    # This triggers the 'admin' plugin located in plugins/admin/main.py
+    plugins:
+      - admin
+
+  # The /test command sends a text message along with 3 different sample files.
+  - key: /test
+    messages:
+      - Here are your sample files! I hope they are helpful.
+    photos:
+      - ./assets/sample.jpg
+    audios:
+      - ./assets/sample.ogg
+    documents:
+      - ./assets/sample.pdf
+
+# ==============================================================================
+# Fallback Settings
+# ==============================================================================
+
+# This section defines what the bot should do when it doesn't understand a message.
 wrong_command:
   messages:
-  - Sorry, I don't understand that command. Try /start.
+    - Sorry, I don't understand that command. Try typing /start or /help.
+
+# ==============================================================================
+# Admin Plugin Settings
+# ==============================================================================
+
+# This command allows you to cancel any ongoing operation in the admin panel.
+# If you are in the middle of adding a photo or text, typing this will abort it.
+admin_cancel_command: /cancel
