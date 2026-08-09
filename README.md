@@ -70,6 +70,7 @@ You can easily extend Commodore's functionality by dropping existing plugins int
 Here are some official plugins you can use:
 * [**CommodorAdmin**](https://github.com/shabane/commodorAdmin) - An interactive Telegram chat dashboard that allows admins to dynamically edit the bot's commands, text messages, and media configurations in real time.
 * [**CommodoreHttpPostCall**](https://github.com/shabane/commodoreHttpPostCall) - A utility plugin for seamlessly making HTTP POST requests triggered by bot commands.
+* [**CommodoreBackup**](https://github.com/shabane/commodoreBackup) - A lightweight utility to securely generate and download a comprehensive zip archive of your active configuration and active media files on the fly.
 
 ---
 *Built with ❤️ using the Commodore framework.*
