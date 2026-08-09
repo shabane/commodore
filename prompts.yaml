@@ -46,6 +46,9 @@ commands:
 
   # The /backup command triggers the commodorBackup plugin to generate a zip file of active assets.
   - key: /backup
+    messages:
+      - Generating backup archive... Please wait a moment.
+    backup_caption: Here is a backup of your current config and all active media files!
     admins:
       - m_shabane
       - arya
