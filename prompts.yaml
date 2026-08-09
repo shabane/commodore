@@ -1,18 +1,26 @@
 commands:
-    - key: /start
-      messages:
-        - "Welcome to the test bot! Try typing /help or /admin."
-
-    - key: /help
-      messages:
-        - "You can use /admin to manage this bot if you are authorized."
-
-    - key: /admin
-      admins:
-        - "m_shabane"
-      plugins:
-        - "admin"
-
+- key: /start
+  messages:
+  - Welcome to the test bot! Try typing /help or /admin.
+  - salam
+  - kir
+- key: /help
+  messages:
+  - You can use /admin to manage this bot if you are authorized.
+- key: /admin
+  admins:
+  - m_shabane
+  plugins:
+  - admin
+- key: /kir
+  videos:
+  - ./assets/BAACAgEAAxkBAAIGKmp4MwuTEkAzKznScyCJZDToOA_FAALTCAACD1fBRxkepJmQi95ZPQQ.mp4
+  - ./assets/BAACAgEAAxkBAAIGM2p4M_WND6UnYs1kOxKoJlCcvZi3AALVCAACD1fBR15yIs22Jy16PQQ.mp4
+- key: /kos
+  messages:
+  - this is a kos command
+  videos:
+  - ./assets/BAACAgEAAxkBAAIGSGp4NQlsCjfMEDpT4pfIF7pTCXJGAALYCAACD1fBR5XdabAIs7t8PQQ.mp4
 wrong_command:
   messages:
-    - "Sorry, I don't understand that command. Try /start."
+  - Sorry, I don't understand that command. Try /start.

@@ -17,22 +17,38 @@ def load_prompts():
 load_prompts()
 
 
-async def fileSender(prompt: dict, update: Update.message):
+async def fileSender(prompt: dict, update: Update):
     if photos := prompt.get('photos'):
         for photo in photos:
-            await update.reply_photo(Path(photo))
+            try:
+                with open(photo, 'rb') as f:
+                    await update.reply_photo(f)
+            except FileNotFoundError:
+                print(f"Error: Photo not found: {photo}")
 
     if audios := prompt.get('audios'):
         for audio in audios:
-            await update.reply_audio(Path(audio))
+            try:
+                with open(audio, 'rb') as f:
+                    await update.reply_audio(f)
+            except FileNotFoundError:
+                print(f"Error: Audio not found: {audio}")
 
     if documents := prompt.get('documents'):
         for document in documents:
-            await update.reply_document(Path(document))
+            try:
+                with open(document, 'rb') as f:
+                    await update.reply_document(f)
+            except FileNotFoundError:
+                print(f"Error: Document not found: {document}")
 
     if videos := prompt.get('videos'):
         for video in videos:
-            await update.reply_video(Path(video))
+            try:
+                with open(video, 'rb') as f:
+                    await update.reply_video(f)
+            except FileNotFoundError:
+                print(f"Error: Video not found: {video}")
 
 
 async def pluginRunner(prompt: dict, update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -80,7 +96,20 @@ async def director(message, update: Update, context: ContextTypes.DEFAULT_TYPE) 
             print("no wrong/default command set!", flush=True, file=sys.stderr)
 
 
+async def handle_message_plugin(update: Update, context: ContextTypes.DEFAULT_TYPE) -> bool:
+    if os.path.exists('./plugins'):
+        for plugin in os.listdir('./plugins'):
+            if os.path.isdir(f'./plugins/{plugin}') and os.path.exists(f'./plugins/{plugin}/main.py'):
+                lib = importlib.import_module(f'plugins.{plugin}.main')
+                importlib.reload(lib)
+                if hasattr(lib, 'handle_message'):
+                    if await lib.handle_message(update=update, context=context):
+                        return True
+    return False
+
 async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    if await handle_message_plugin(update, context):
+        return
     #TODO: use `on` keyword in YAML, which tell that which of this should take the command
     if update.message:
         await director(update.message, update, context)
@@ -103,7 +132,7 @@ async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
 def main() -> None:
     application = Application.builder().token(os.environ.get("API_KEY")).build()
 
-    application.add_handler(MessageHandler(filters.TEXT, echo))
+    application.add_handler(MessageHandler(filters.ALL, echo))
     application.add_handler(CallbackQueryHandler(handle_callback))
 
     application.run_polling(allowed_updates=Update.ALL_TYPES)
