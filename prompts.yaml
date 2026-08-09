@@ -1,27 +1,18 @@
 commands:
-    - key: foo
+    - key: /start
       messages:
-        - "foo"
-        - "the foo"
-        - "foo to the moon!"
+        - "Welcome to the test bot! Try typing /help or /admin."
+
+    - key: /help
+      messages:
+        - "You can use /admin to manage this bot if you are authorized."
+
+    - key: /admin
+      admins:
+        - "m_shabane"
       plugins:
-        - "test" # this plugin is just for test
-
-    - key: foo2
-      messages:
-        - "bar2"
-
-    - key: /command
-      messages:
-        - "you send me a command! now i will send back a photo"
-
-      photos:
-        - "./assets/goat.jpg"
+        - "admin"
 
 wrong_command:
   messages:
-    - "you enter the wrong message or command!"
-    - "please choose one of this `/command`, `foo` or `foo2`"
-
-  photos:
-    - "./assets/goat.jpg"
+    - "Sorry, I don't understand that command. Try /start."

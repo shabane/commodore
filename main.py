@@ -9,8 +9,12 @@ import importlib
 
 
 prompts = None
-with open(f'{os.environ.get("PROMPTS_FILE", "./prompts.yaml")}', 'r') as fle:
-    prompts = yaml.safe_load(fle)
+def load_prompts():
+    global prompts
+    with open(f'{os.environ.get("PROMPTS_FILE", "./prompts.yaml")}', 'r') as fle:
+        prompts = yaml.safe_load(fle)
+
+load_prompts()
 
 
 async def fileSender(prompt: dict, update: Update.message):
@@ -31,20 +35,22 @@ async def fileSender(prompt: dict, update: Update.message):
             await update.reply_video(Path(video))
 
 
-async def pluginRunner(prompt: dict, update: Update.message):
+async def pluginRunner(prompt: dict, update: Update, context: ContextTypes.DEFAULT_TYPE):
             if plugins := prompt.get('plugins'):
                 for plugin in plugins:
                     if os.path.exists(f'./plugins/{plugin}/main.py'):
                         lib = importlib.import_module(f'plugins.{plugin}.main')
+                        # allow hot reloading plugins
+                        importlib.reload(lib)
                         if hasattr(lib, 'run'):
-                            await lib.run(prompt=prompt, update=update)
+                            await lib.run(prompt=prompt, update=update, context=context)
                         else:
                             print("plugin is not right") #TODO: this should be a better error handling.
                     else:
                         print("plugin file does not exist") #TODO: use the better error handling method.
 
 
-async def director(update: Update.message) -> str:
+async def director(message, update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     #TODO: check file existance before using it path!
     #TODO: check if yaml file is correct and exist!
     #TODO: use caption for each files that we sending.
@@ -52,24 +58,24 @@ async def director(update: Update.message) -> str:
     #TODO: use seprate file for some functionalities
     #TODO: we should let this run another module to run and send data to user(importlib)
     is_cmd_match = False
-    for prompt in prompts.get('commands'):
-        if prompt.get('key') == update.text:
+    for prompt in prompts.get('commands', []):
+        if prompt.get('key') == message.text:
             is_cmd_match = True
             if messages := prompt.get('messages'):
-                for message in messages:
-                    await update.reply_text(f'{message}')
+                for msg in messages:
+                    await message.reply_text(f'{msg}')
 
-            await fileSender(prompt, update)
-            await pluginRunner(prompt, update)
+            await fileSender(prompt, message)
+            await pluginRunner(prompt, update, context)
 
 
     if not is_cmd_match:
         if prompt := prompts.get('wrong_command'):
             if messages := prompt.get('messages'):
-                for message in messages:
-                    await update.reply_text(f'{message}')
-            await fileSender(prompt, update)
-            await pluginRunner(prompt, update)
+                for msg in messages:
+                    await message.reply_text(f'{msg}')
+            await fileSender(prompt, message)
+            await pluginRunner(prompt, update, context)
         else:
             print("no wrong/default command set!", flush=True, file=sys.stderr)
 
@@ -77,17 +83,28 @@ async def director(update: Update.message) -> str:
 async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     #TODO: use `on` keyword in YAML, which tell that which of this should take the command
     if update.message:
-        await director(update.message)
+        await director(update.message, update, context)
     elif update.business_message:
-        await director(update.business_message)
+        await director(update.business_message, update, context)
     else:
         print("No supported message!", flush=True, file=sys.stderr)
+
+from telegram.ext import CallbackQueryHandler
+async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    if os.path.exists('./plugins'):
+        for plugin in os.listdir('./plugins'):
+            if os.path.isdir(f'./plugins/{plugin}') and os.path.exists(f'./plugins/{plugin}/main.py'):
+                lib = importlib.import_module(f'plugins.{plugin}.main')
+                importlib.reload(lib)
+                if hasattr(lib, 'callback'):
+                    await lib.callback(update=update, context=context)
 
 
 def main() -> None:
     application = Application.builder().token(os.environ.get("API_KEY")).build()
 
     application.add_handler(MessageHandler(filters.TEXT, echo))
+    application.add_handler(CallbackQueryHandler(handle_callback))
 
     application.run_polling(allowed_updates=Update.ALL_TYPES)
 
