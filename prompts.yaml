@@ -21,6 +21,13 @@ commands:
   - this is a kos command
   videos:
   - ./assets/BAACAgEAAxkBAAIGSGp4NQlsCjfMEDpT4pfIF7pTCXJGAALYCAACD1fBR5XdabAIs7t8PQQ.mp4
+  audios:
+  - ./assets/AwACAgEAAxkBAAIGU2p4NXN4yHmYWd3pDvx3QF0zdKsKAALbCAACD1fBR7piHFGhOHNdPQQ.ogg
+  photos:
+  - ./assets/AgACAgEAAxkBAAIGa2p4N6A4UlaxjGkJkskWOoUtUXyuAAKHDGsbD1fBR6PbncizJ8z1AQADAgADeQADPQQ.jpg
+  documents:
+  - ./assets/BQACAgEAAxkBAAIGdGp4N8giUjHneaJfOiCZ-XMNFG1sAAIMCQACD1fBRxuFKCY2fZV5PQQ.pdf
+  - ./assets/BQACAgEAAxkBAAIGd2p4N9N6h3mqQIvvca4dezToHqRuAAINCQACD1fBR5xWM1kDV8YGPQQ.pdf
 wrong_command:
   messages:
   - Sorry, I don't understand that command. Try /start.
