@@ -1,5 +1,5 @@
-FROM python:alpine
-RUN apk add entr
+FROM python:3.11-slim
+RUN apt-get update && apt-get install -y entr
 COPY . /code
 WORKDIR /code
 RUN pip install -r /code/requirements.txt
