@@ -60,6 +60,8 @@ commands:
 ## Plugin Architecture
 Plugins are stored in the `./plugins/` directory. Each plugin must be a folder containing a `main.py` file with an async `run(prompt, update, context)` function. 
 
+**Want to write your own plugin? Check out the [Plugin Development Guide](PLUGIN_DEVELOPMENT.md)!**
+
 You can configure a command in `prompts.yaml` to trigger one or more plugins when the command is sent by the user.
 
 ## Available Plugins
