@@ -42,7 +42,7 @@ commands:
     audios:
       - ./assets/sample.ogg
     documents:
-      - ./assets/sample.pdf
+      - ./assets/sample.txt
 
 # ==============================================================================
 # Fallback Settings
