@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
-from telegram import ForceReply, Update
-from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters
+from telegram.ext import CallbackQueryHandler
+from telegram import Update
+from telegram.ext import Application, ContextTypes, MessageHandler, filters
 import os
 import yaml
-from pathlib import Path
 import sys
 import importlib
 
 
 prompts = None
+
+
 def load_prompts():
     global prompts
     with open(f'{os.environ.get("PROMPTS_FILE", "./prompts.yaml")}', 'r') as fle:
         prompts = yaml.safe_load(fle)
+
 
 load_prompts()
 
@@ -51,28 +54,37 @@ async def fileSender(prompt: dict, update: Update):
                 print(f"Error: Video not found: {video}")
 
 
-async def pluginRunner(prompt: dict, update: Update, context: ContextTypes.DEFAULT_TYPE):
-            if plugins := prompt.get('plugins'):
-                for plugin in plugins:
-                    if os.path.exists(f'./plugins/{plugin}/main.py'):
-                        lib = importlib.import_module(f'plugins.{plugin}.main')
-                        # allow hot reloading plugins
-                        importlib.reload(lib)
-                        if hasattr(lib, 'run'):
-                            await lib.run(prompt=prompt, update=update, context=context)
-                        else:
-                            print("plugin is not right") #TODO: this should be a better error handling.
-                    else:
-                        print("plugin file does not exist") #TODO: use the better error handling method.
+async def pluginRunner(
+        prompt: dict,
+        update: Update,
+        context: ContextTypes.DEFAULT_TYPE):
+    if plugins := prompt.get('plugins'):
+        for plugin in plugins:
+            if os.path.exists(f'./plugins/{plugin}/main.py'):
+                lib = importlib.import_module(f'plugins.{plugin}.main')
+                # allow hot reloading plugins
+                importlib.reload(lib)
+                if hasattr(lib, 'run'):
+                    await lib.run(prompt=prompt, update=update, context=context)
+                else:
+                    # TODO: this should be a better error handling.
+                    print("plugin is not right")
+            else:
+                # TODO: use the better error handling method.
+                print("plugin file does not exist")
 
 
-async def director(message, update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
-    #TODO: check file existance before using it path!
-    #TODO: check if yaml file is correct and exist!
-    #TODO: use caption for each files that we sending.
-    #TODO: sending messages are duplicated ageain!
-    #TODO: use seprate file for some functionalities
-    #TODO: we should let this run another module to run and send data to user(importlib)
+async def director(
+        message,
+        update: Update,
+        context: ContextTypes.DEFAULT_TYPE) -> str:
+    # TODO: check file existance before using it path!
+    # TODO: check if yaml file is correct and exist!
+    # TODO: use caption for each files that we sending.
+    # TODO: sending messages are duplicated ageain!
+    # TODO: use seprate file for some functionalities
+    # TODO: we should let this run another module to run and send data to
+    # user(importlib)
     is_cmd_match = False
     for prompt in prompts.get('commands', []):
         if prompt.get('key') == message.text:
@@ -83,7 +95,6 @@ async def director(message, update: Update, context: ContextTypes.DEFAULT_TYPE) 
 
             await fileSender(prompt, message)
             await pluginRunner(prompt, update, context)
-
 
     if not is_cmd_match:
         if prompt := prompts.get('wrong_command'):
@@ -96,10 +107,12 @@ async def director(message, update: Update, context: ContextTypes.DEFAULT_TYPE) 
             print("no wrong/default command set!", flush=True, file=sys.stderr)
 
 
-async def handle_message_plugin(update: Update, context: ContextTypes.DEFAULT_TYPE) -> bool:
+async def handle_message_plugin(update: Update,
+                                context: ContextTypes.DEFAULT_TYPE) -> bool:
     if os.path.exists('./plugins'):
         for plugin in os.listdir('./plugins'):
-            if os.path.isdir(f'./plugins/{plugin}') and os.path.exists(f'./plugins/{plugin}/main.py'):
+            if os.path.isdir(
+                    f'./plugins/{plugin}') and os.path.exists(f'./plugins/{plugin}/main.py'):
                 lib = importlib.import_module(f'plugins.{plugin}.main')
                 importlib.reload(lib)
                 if hasattr(lib, 'handle_message'):
@@ -107,10 +120,12 @@ async def handle_message_plugin(update: Update, context: ContextTypes.DEFAULT_TY
                         return True
     return False
 
+
 async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if await handle_message_plugin(update, context):
         return
-    #TODO: use `on` keyword in YAML, which tell that which of this should take the command
+    # TODO: use `on` keyword in YAML, which tell that which of this should
+    # take the command
     if update.message:
         await director(update.message, update, context)
     elif update.business_message:
@@ -118,11 +133,14 @@ async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     else:
         print("No supported message!", flush=True, file=sys.stderr)
 
-from telegram.ext import CallbackQueryHandler
-async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+
+async def handle_callback(
+        update: Update,
+        context: ContextTypes.DEFAULT_TYPE) -> None:
     if os.path.exists('./plugins'):
         for plugin in os.listdir('./plugins'):
-            if os.path.isdir(f'./plugins/{plugin}') and os.path.exists(f'./plugins/{plugin}/main.py'):
+            if os.path.isdir(
+                    f'./plugins/{plugin}') and os.path.exists(f'./plugins/{plugin}/main.py'):
                 lib = importlib.import_module(f'plugins.{plugin}.main')
                 importlib.reload(lib)
                 if hasattr(lib, 'callback'):
